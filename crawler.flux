@@ -21,9 +21,42 @@ bolts:
   - id: "parse"
     className: "com.digitalpebble.stormcrawler.bolt.JSoupParserBolt"
     parallelism: 1
+  - id: "index"
+    className: "com.digitalpebble.stormcrawler.indexing.DummyIndexer"
+    parallelism: 1
+  - id: "status"
+    className: "com.digitalpebble.stormcrawler.vespa.persistence.StatusUpdaterBolt"
+    parallelism: 1
 
 streams:
   - from: "spout"
     to: "parse"
     grouping:
       type: SHUFFLE
+      
+  - from: "parse"
+    to: "index"
+    grouping:
+      type: LOCAL_OR_SHUFFLE
+
+  - from: "spout"
+    to: "status"
+    grouping:
+      type: FIELDS
+      args: ["url"]
+      streamId: "status"
+ 
+  - from: "parse"
+    to: "status"
+    grouping:
+      type: FIELDS
+      args: ["url"]
+      streamId: "status" 
+      
+  - from: "index"
+    to: "status"
+    grouping:
+      type: FIELDS
+      args: ["url"]
+      streamId: "status"
+  

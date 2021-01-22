@@ -80,6 +80,8 @@ config:
    - STYLE
    - SCRIPT
 
+  vespa.port: 8080
+
   # custom fetch interval to be used when a document has the key/value in its metadata
   # and has been fetched successfully (value in minutes)
   # fetchInterval.FETCH_ERROR.isFeed=true: 30
