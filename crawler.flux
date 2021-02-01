@@ -20,7 +20,7 @@ spouts:
 bolts:
   - id: "parse"
     className: "com.digitalpebble.stormcrawler.bolt.JSoupParserBolt"
-    parallelism: 1
+    parallelism: 4
   - id: "index"
     className: "com.digitalpebble.stormcrawler.indexing.DummyIndexer"
     parallelism: 1
