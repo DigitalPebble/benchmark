@@ -104,7 +104,7 @@
 
 		<dependency>
 			<groupId>com.digitalpebble.stormcrawler</groupId>
-			<artifactId>storm-crawler-vespa</artifactId>
+			<artifactId>storm-crawler-elasticsearch</artifactId>
 			<version>${stormcrawler.version}</version>
 		</dependency>
 		<dependency>

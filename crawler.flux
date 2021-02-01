@@ -9,6 +9,10 @@ includes:
       file: "crawler-conf.yaml"
       override: true
 
+    - resource: false
+      file: "es-conf.yaml"
+      override: true
+
 spouts:
   - id: "spout"
     className: "com.digitalpebble.stormcrawler.warc.WARCSpout"
@@ -25,7 +29,7 @@ bolts:
     className: "com.digitalpebble.stormcrawler.indexing.DummyIndexer"
     parallelism: 1
   - id: "status"
-    className: "com.digitalpebble.stormcrawler.vespa.persistence.StatusUpdaterBolt"
+    className: "com.digitalpebble.stormcrawler.elasticsearch.persistence.StatusUpdaterBolt"
     parallelism: 1
 
 streams:
