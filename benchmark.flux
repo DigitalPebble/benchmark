@@ -1,4 +1,4 @@
-name: "crawler"
+name: "benchmark-elastic"
 
 includes:
     - resource: true
