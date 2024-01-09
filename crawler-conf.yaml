@@ -18,15 +18,18 @@ config:
   # mandatory when using Flux
   topology.kryo.register:
     - com.digitalpebble.stormcrawler.Metadata
+    - com.digitalpebble.stormcrawler.persistence.Status
 
-  # metadata to transfer to the outlinks
-  # used by Fetcher for redirections, sitemapparser, etc...
-  # these are also persisted for the parent document (see below)
+  # Lists the metadata to transfer to outlinks
+  # Used by Fetcher and SiteMapParser for redirections,
+  # discovered links, passing cookies to child pages, etc.
+  # These are also persisted for the parent document (see below).
+  # Allows wildcards, eg. "follow.*" transfers all metadata starting with "follow.".
   # metadata.transfer:
   # - customMetadataName
 
-  # lists the metadata to persist to storage
-  # these are not transfered to the outlinks
+  # Lists the metadata to persist to storage
+  # These are not transferred to the outlinks. Also allows wildcards, eg. "follow.*".
   metadata.persist:
    - _redirTo
    - error.cause
@@ -34,11 +37,22 @@ config:
    - isSitemap
    - isFeed
 
-  http.agent.name: "Anonymous Coward"
-  http.agent.version: "1.0"
-  http.agent.description: "built with StormCrawler Archetype 1.18-SNAPSHOT"
-  http.agent.url: "http://someorganization.com/"
-  http.agent.email: "someone@someorganization.com"
+  # Agent name info - given here as an example. Do not be an anonynmous coward, use your real information!
+  # The full user agent value sent as part of the HTTP requests
+  # is built from the elements below. Only the agent.name is mandatory,
+  # it is also used to parse the robots.txt directives. 
+
+  # The agent name must be compliant with RFC 9309 (section 2.2.1) 
+  # i.e. it MUST contain only uppercase and lowercase letters ("a-z" and "A-Z), underscores ("_"), and hyphens ("-")
+  http.agent.name: "digitalpebble-crawler"
+  # version of your crawler
+  http.agent.version: "1"
+  # description of what it does
+  http.agent.description: "none"
+  # URL webmasters can go to to learn about it
+  http.agent.url: "http://digitalpebble.com"
+  # Finally, an email so that they can get in touch with you
+  http.agent.email: "contact@digitalpebble.com"
 
   http.protocol.implementation: "com.digitalpebble.stormcrawler.protocol.okhttp.HttpProtocol"
   https.protocol.implementation: "com.digitalpebble.stormcrawler.protocol.okhttp.HttpProtocol"
@@ -46,7 +60,15 @@ config:
   # The maximum number of bytes for returned HTTP response bodies.
   # The fetched page will be trimmed to 65KB in this case
   # Set -1 to disable the limit.
-  http.content.limit: 99999999
+  http.content.limit: -1
+
+  urlfrontier.host: "localhost"
+  urlfrontier.port: 7071
+
+  urlfrontier.max.buckets: 50
+  urlfrontier.max.urls.per.bucket: 10
+
+  sitemap.discovery: true
 
   # FetcherBolt queue dump => comment out to activate
   # if a file exists on the worker machine with the corresponding port number
@@ -55,6 +77,7 @@ config:
 
   parsefilters.config.file: "parsefilters.json"
   urlfilters.config.file: "urlfilters.json"
+  jsoup.filters.config.file: "jsoupfilters.json"
 
   # revisit a page daily (value in minutes)
   # set it to -1 to never refetch a page
@@ -80,6 +103,19 @@ config:
    - STYLE
    - SCRIPT
 
+  # needed for parsing with Tika
+  jsoup.treat.non.html.as.error: false
+
+  # restricts the documents types to be parsed with Tika
+  parser.mimetype.whitelist:
+   - application/.+word.*
+   - application/.+excel.*
+   - application/.+powerpoint.*
+   - application/.*pdf.*
+
+  # Tika parser configuration file
+  parse.tika.config.file: "tika-config.xml"
+
   # custom fetch interval to be used when a document has the key/value in its metadata
   # and has been fetched successfully (value in minutes)
   # fetchInterval.FETCH_ERROR.isFeed=true: 30
@@ -90,11 +126,23 @@ config:
   indexer.url.fieldname: "url"
   indexer.text.fieldname: "content"
   indexer.canonical.name: "canonical"
+  # How to convert metadata key values into fields for indexing
+  # 
+  # if no alias is specified with =alias, the key value is used
+  # for instance below, _domain_ and _format_ will be used 
+  # as field names, whereas _title_ will be used for _parse.title_.
+  # You can specify the index of the value to store from the values array 
+  # by using the _key[index]_ format, e.g. _parse.title[0]_ would try to 
+  # get the first value for the metadata _parse.title_ (which is the default anyway).
+  # Finally, you can use a glob (*) to match all the keys, e.g. _parse.*_ would
+  # index all the keys with _parse_ as a prefix. Note that in that case, you can't
+  # specify an alias with =, nor can you specify an index.
   indexer.md.mapping:
   - parse.title=title
   - parse.keywords=keywords
   - parse.description=description
-  - domain=domain
+  - domain
+  - format
 
   # Metrics consumers:
   topology.metrics.consumer.register:
