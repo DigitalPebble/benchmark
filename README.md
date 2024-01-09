@@ -6,7 +6,8 @@ aws s3 cp s3://commoncrawl/crawl-data/CC-MAIN-2020-50/segments/1606141163411.0/w
 
 aws s3 cp s3://commoncrawl/crawl-data/CC-MAIN-2020-50/segments/1606141163411.0/warc/ warc --recursive
 
-ls warc > warc/index.lst
+rm warc/index.lst
+for f in `ls warc | grep '.gz$'`; do echo $PWD/warc/$f >> warc/index.lst; done
 
 docker compose up -d
 
