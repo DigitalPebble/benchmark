@@ -16,7 +16,7 @@ includes:
 spouts:
   - id: "spout"
     className: "com.digitalpebble.stormcrawler.warc.WARCSpout"
-    parallelism: 1
+    parallelism: 4
     constructorArgs:
       - "warc/"
       - "index.lst"
@@ -27,7 +27,7 @@ bolts:
     parallelism: 4
   - id: "index"
     className: "com.digitalpebble.stormcrawler.indexing.DummyIndexer"
-    parallelism: 1
+    parallelism: 4
   - id: "status"
     className: "com.digitalpebble.stormcrawler.elasticsearch.persistence.StatusUpdaterBolt"
     parallelism: 1
