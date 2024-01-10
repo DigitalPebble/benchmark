@@ -1,0 +1,22 @@
+# configuration for OpenSearch resources
+  
+config:
+
+  opensearch.addresses: 
+    - "http://localhost:9200"
+  #  - "http://localhost:9201"
+
+  opensearch.user: "admin"
+  opensearch.password: "admin"
+
+  opensearch.status.index.name: "status"
+  # the routing is done on the value of 'partition.url.mode'
+  opensearch.status.routing: true
+  # stores the value used for grouping the URLs as a separate field
+  # needed by the spout implementations
+  # also used for routing if the value above is set to true 
+  opensearch.status.routing.fieldname: "key"
+  opensearch.status.bulkActions: 500
+  opensearch.status.flushInterval: "5s"
+  opensearch.status.concurrentRequests: 4
+  

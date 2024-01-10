@@ -10,7 +10,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<stormcrawler.version>2.11</stormcrawler.version>
+		<stormcrawler.version>2.12-SNAPSHOT</stormcrawler.version>
 		<storm.version>2.6.0</storm.version>
 	</properties>
 
@@ -104,7 +104,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.digitalpebble.stormcrawler</groupId>
-			<artifactId>storm-crawler-elasticsearch</artifactId>
+			<artifactId>storm-crawler-opensearch</artifactId>
 			<version>${stormcrawler.version}</version>
 		</dependency>
 		<dependency>

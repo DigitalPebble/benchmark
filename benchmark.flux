@@ -1,4 +1,4 @@
-name: "benchmark-elastic"
+name: "benchmark-opensearch"
 
 includes:
     - resource: true
@@ -10,7 +10,7 @@ includes:
       override: true
 
     - resource: false
-      file: "es-conf.yaml"
+      file: "opensearch-conf.yaml"
       override: true
 
 spouts:
@@ -18,7 +18,7 @@ spouts:
     className: "com.digitalpebble.stormcrawler.warc.WARCSpout"
     parallelism: 4
     constructorArgs:
-      - "warc/"
+      - "/data/warc/"
       - "index.lst"
 
 bolts:
@@ -29,7 +29,7 @@ bolts:
     className: "com.digitalpebble.stormcrawler.indexing.DummyIndexer"
     parallelism: 4
   - id: "status"
-    className: "com.digitalpebble.stormcrawler.elasticsearch.persistence.StatusUpdaterBolt"
+    className: "com.digitalpebble.stormcrawler.opensearch.persistence.StatusUpdaterBolt"
     parallelism: 1
 
 streams:
