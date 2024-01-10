@@ -18,7 +18,7 @@ spouts:
     className: "com.digitalpebble.stormcrawler.warc.WARCSpout"
     parallelism: 4
     constructorArgs:
-      - "warc/"
+      - "/data/warc/"
       - "index.lst"
 
 bolts:
