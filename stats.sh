@@ -1,24 +1,24 @@
 #!/bin/bash
 
-if [ $# -lt 2 ]; then
-    echo "Usage: $0 <CRAWLNAME> <STATSFILE> [LOGDIR]"
+# Finds the average messages received from the back end
+# stores the timestamps and values in STATSFILE
+# then prints out the average, leaving out the last entry
+
+STATSFILE=$1
+LOGDIR=${2:-/var/log/storm/workers-artifacts/}
+
+if [ -z "$STATSFILE" ]; then
+    echo "Error: STATSFILE must be provided."
     exit 1
 fi
 
-CRAWLNAME=$1
-STATSFILE=$2
-LOGDIR=${3:-/var/log/storm/workers-artifacts/}
-
-if [ -z "$CRAWLNAME" ] || [ -z "$STATSFILE" ]; then
-    echo "Error: Both CRAWLNAME and STATSFILE must be provided."
-    exit 1
-fi
+input=$(ls -t $LOGDIR | head -n 1)
 
 mkdir -p stats
 
 log_file=stats/$STATSFILE.log
 
-cat $LOGDIR/$CRAWLNAME/6700/worker.log.metrics  | grep average_persec | grep -v received=0.0 > $log_file
+cat $LOGDIR/$input/6700/worker.log.metrics  | grep average_persec | grep -v received=0.0 > $log_file
 
 if [ ! -f "$log_file" ]; then
     echo "Error: File not found: $log_file"
