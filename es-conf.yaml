@@ -17,3 +17,5 @@ config:
   es.status.flushInterval: "5s"
   es.status.concurrentRequests: 4
  
+  # allows to use the Rest client on ES8+
+  es.status.compatibility.mode: true
