@@ -1,4 +1,4 @@
-name: "benchmark-opensearch"
+name: "benchmark"
 
 includes:
     - resource: true
