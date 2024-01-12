@@ -30,7 +30,7 @@ for f in `ls /data/warc | grep '.gz$'`; do echo $PWD/warc/$f >> /data/warc/index
 # Start Elasticsearch instances and configure the status index
 
 ```
-docker compose up -d
+docker compose up -d --remove-orphans
 ./ES_IndexInit.sh
 ```
 
@@ -54,3 +54,6 @@ You can extract the values with
 
 The last non-0 entry is often partial, you can omit it. For the purpose of comparing different configurations and setups, use the code in this branch as a baseline.
 The actual perfs depend on the hardware, what we are interested in is getting a measure of improvement relative to the baseline.
+
+
+
