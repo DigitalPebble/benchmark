@@ -1,4 +1,4 @@
-name: "benchmark-elastic"
+name: "benchmark"
 
 includes:
     - resource: true
