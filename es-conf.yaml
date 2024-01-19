@@ -15,7 +15,7 @@ config:
   es.status.routing.fieldname: "key"
   es.status.bulkActions: 500
   es.status.flushInterval: "5s"
-  es.status.concurrentRequests: 4
+  es.status.concurrentRequests: 16
  
   # allows to use the Rest client on ES8+
   es.status.compatibility.mode: true
