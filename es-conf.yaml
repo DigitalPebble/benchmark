@@ -15,5 +15,5 @@ config:
   es.status.routing.fieldname: "key"
   es.status.bulkActions: 500
   es.status.flushInterval: "5s"
-  es.status.concurrentRequests: 4
+  es.status.concurrentRequests: 16
  
