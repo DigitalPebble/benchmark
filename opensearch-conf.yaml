@@ -18,5 +18,5 @@ config:
   opensearch.status.routing.fieldname: "key"
   opensearch.status.bulkActions: 500
   opensearch.status.flushInterval: "5s"
-  opensearch.status.concurrentRequests: 4
+  opensearch.status.concurrentRequests: 16
   
