@@ -36,23 +36,30 @@ docker compose up -d --remove-orphans
 
 # Run the benchmark topology
 
-```
-storm local --local-ttl 9999999 target/benchmark-1.0-SNAPSHOT.jar  org.apache.storm.flux.Flux benchmark.flux 
-
-```
-
-The metric you want to track is `average_persec` in the status
+The metric you want to track is `average_persec` from the _status_ bolt
 
 ```
 2024-01-10 15:56:34,832 92527    1704902194	julien-XPS-15-9520:6700	 15:status     	average_persec         	{received=49300.66101355412}
 ```
 
-Assuming you are capturing the lines similar to the one above (thanks to grep)
-You can extract the values with
+Assuming you are running the topology locally with
 
-`cat ~/benchmark.metric | sed 's/received=/   /' | cut -f 6 | sed 's/\./      /' | cut -f1`
+```
+storm local --local-ttl 9999999 target/benchmark-1.0-SNAPSHOT.jar  org.apache.storm.flux.Flux benchmark.flux | grep average_persec | grep -v received=0.0 > benchmark.metric
 
-The last non-0 entry is often partial, you can omit it. For the purpose of comparing different configurations and setups, use the code in this branch as a baseline.
+```
+
+You can extract the values and compute the average with 
+
+```
+./stats.sh benchmark.metric 
+```
+
+No need to grep the output in distributed mode, the stats script will automatically retrieve it from the workers metrics and store the content in a _stats_ directory, using the file name
+passed as argument.
+
+
+For the purpose of comparing different configurations and setups, use the code in this branch as a baseline.
 The actual perfs depend on the hardware, what we are interested in is getting a measure of improvement relative to the baseline.
 
 
