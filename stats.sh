@@ -1,34 +1,25 @@
 #!/bin/bash
 
-# Finds the average messages received from the back end
-# stores the timestamps and values in STATSFILE
-# then prints out the average, leaving out the last entry
+# Extracts metrics from the worker metrics file
+# unless provided as input
+# then prints out the average value, leaving out the last entry
 
 STATSFILE=$1
-LOGDIR=${2:-/var/log/storm/workers-artifacts/}
 
-if [ -z "$STATSFILE" ]; then
-    echo "Error: STATSFILE must be provided."
-    exit 1
-fi
+# log file does not exist - extract it from the worker's metrics
+# and store it in 
 
-input=$(ls -t $LOGDIR | head -n 1)
-
-mkdir -p stats
-
-log_file=stats/$STATSFILE.log
-
-cat $LOGDIR/$input/6700/worker.log.metrics  | grep average_persec | grep -v received=0.0 > $log_file
-
-if [ ! -f "$log_file" ]; then
-    echo "Error: File not found: $log_file"
-    exit 1
+if [ ! -f "$STATSFILE" ]; then
+    input=$(ls -t /var/log/storm/workers-artifacts/ | head -n 1)
+    mkdir -p stats
+    STATSFILE=stats/$STATSFILE.log
+    cat /var/log/storm/workers-artifacts/$input/6700/worker.log.metrics  | grep average_persec | grep -v received=0.0 > $STATSFILE
 fi
 
 total_received=0
 count=0
 
-echo "Parsing $log_file"
+echo "Parsing $STATSFILE"
 
 while IFS= read -r log_line; do
     if [ -n "$log_line" ]; then
@@ -38,7 +29,7 @@ while IFS= read -r log_line; do
             ((count++))
         fi
     fi
-done < <(head -n -1 "$log_file")
+done < <(head -n -1 "$STATSFILE")
 
 
 if [ "$count" -gt 0 ]; then
