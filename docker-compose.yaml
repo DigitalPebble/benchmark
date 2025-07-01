@@ -3,7 +3,7 @@ version: '3.1'
 services:
 
   opensearch-node1: # This is also the hostname of the container within the Docker network (i.e. https://opensearch-node1/)
-    image: opensearchproject/opensearch:latest # Specifying the latest available image - modify if you want a specific version
+    image: opensearchproject/opensearch:2.12.0 # Specifying the latest available image - modify if you want a specific version
     container_name: opensearch-node1
     environment:
       - cluster.name=opensearch-cluster # Name the cluster
@@ -13,6 +13,7 @@ services:
       - bootstrap.memory_lock=true # Disable JVM heap memory swapping
       - "OPENSEARCH_JAVA_OPTS=-Xms2g -Xmx2g" # Set min and max JVM heap sizes to at least 50% of system RAM
       - plugins.security.disabled=true
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=This1sAPassw0rd
     ulimits:
       memlock:
         soft: -1 # Set memlock to unlimited (no soft or hard limit)
@@ -23,12 +24,12 @@ services:
     ports:
       - 9200:9200 # REST API
       - 9600:9600 # Performance Analyzer
-    restart: always
+#    restart: always
     networks:
       - opencrawl
 
   opensearch-node2:
-    image: opensearchproject/opensearch:latest # This should be the same image used for opensearch-node1 to avoid issues
+    image: opensearchproject/opensearch:2.12.0 # This should be the same image used for opensearch-node1 to avoid issues
     container_name: opensearch-node2
     environment:
       - cluster.name=opensearch-cluster
@@ -38,6 +39,7 @@ services:
       - bootstrap.memory_lock=true
       - "OPENSEARCH_JAVA_OPTS=-Xms2g -Xmx2g"
       - plugins.security.disabled=true
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=This1sAPassw0rd
     ulimits:
       memlock:
         soft: -1
@@ -47,7 +49,7 @@ services:
         hard: 65536
     ports:
       - 9201:9200 # REST API
-    restart: always
+#    restart: always
     networks:
       - opencrawl
 

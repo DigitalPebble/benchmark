@@ -27,11 +27,11 @@ for f in `ls /data/warc | grep '.gz$'`; do echo $PWD/warc/$f >> /data/warc/index
 
 ```
 
-# Start Elasticsearch instances and configure the status index
+# Start OpenSearch instances and configure the status index
 
 ```
 docker compose up -d --remove-orphans
-./ES_IndexInit.sh
+./OpenSearch-init.sh
 ```
 
 # Run the benchmark topology

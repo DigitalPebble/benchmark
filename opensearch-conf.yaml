@@ -7,7 +7,7 @@ config:
     - "http://localhost:9201"
 
   opensearch.user: "admin"
-  opensearch.password: "admin"
+  opensearch.password: "This1sAPassw0rd"
 
   opensearch.status.index.name: "status"
   # the routing is done on the value of 'partition.url.mode'

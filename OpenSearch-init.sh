@@ -1,7 +1,7 @@
 #!/bin/bash
 
 OSHOST=${1:-"http://localhost:9200"}
-OSCREDENTIALS=${2:-"-u opensearch:passwordhere"}
+OSCREDENTIALS=${2:-"-u admin:This1sAPassw0rd"}
 
 for name in status
 do
